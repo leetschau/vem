@@ -1,0 +1,4 @@
+---
+plugins:
+  - name: xuhdev/vim-latex-live-preview
+    type: github

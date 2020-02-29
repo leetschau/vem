@@ -1,0 +1,6 @@
+---
+plugins:
+  - name: neovimhaskell/haskell-vim
+    type: github
+  - name: ndmitchell/ghcid
+    type: github

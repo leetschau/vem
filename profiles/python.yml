@@ -1,0 +1,19 @@
+---
+conf: |
+
+  let g:pymode_lint_on_fly = 0
+  let g:pymode_breakpoint = 1
+  let g:pymode_breakpoint_bind = '<leader>b'
+  let g:pymode_folding = 0
+  let g:pymode_python = 'python3'
+  " let g:pymode_lint_ignore = ["E402", ]
+  autocmd FileType python cabbrev af PymodeLintAuto<CR>
+
+  " nnoremap <buffer> <F7> :call flake8#Flake8()<CR>
+  autocmd FileType python nnoremap <buffer> <F7> :call flake8#Flake8()<CR>
+
+plugins:
+  - name: nvie/vim-flake8
+    type: github
+  - name: python-mode/python-mode
+    type: github

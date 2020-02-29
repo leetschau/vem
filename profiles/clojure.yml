@@ -1,0 +1,10 @@
+---
+plugins:
+  - name: guns/vim-clojure-static
+    type: github
+  - name: tpope/vim-fireplace
+    type: github
+  - name: guns/vim-clojure-highlight
+    type: github
+  - name: kien/rainbow_parentheses.vim
+    type: github
