@@ -3,6 +3,7 @@ import shutil
 import fire
 import yaml
 from pathlib import Path
+from typing import List
 
 NEW_PROF = Path('/tmp/init.vim')
 BACKUP = Path('backup.vim')
@@ -22,6 +23,8 @@ class ProfileSetter:
                  config = yaml.safe_load(stream)
              except yaml.YAMLError as exc:
                  print(exc)
+                 sys.stderr.write(f"YAML parse failed for file {fullpath}")
+                 sys.exit(1)
         return config
 
     def applyProfile(self, profile:str):
@@ -29,12 +32,21 @@ class ProfileSetter:
             f.write(profile)
         print('  New profile generated at %s' % NEW_PROF)
 
-        shutil.copy2(self._prof_target / TARGET_NAME, self._prof_base / BACKUP)
-        print('  Backup original profile to %s' % self._prof_base / BACKUP)
+        if self._prof_target.exists():
+            shutil.copy2(self._prof_target / TARGET_NAME, self._prof_base / BACKUP)
+            print('  Backup original profile to %s' % self._prof_base / BACKUP)
+        else:
+            print('  Origin profile not exists, skip backup')
 
         self._prof_target.mkdir(parents=True, exist_ok=True)
         shutil.copy2(NEW_PROF, self._prof_target)
         print('  Copy generated file from %s to %s' % (NEW_PROF, self._prof_target))
+
+    def format_vam_plugins(self, plugins: List[dict]) -> str:
+        # TODO: add support for other types
+        return "VAMActivate " + ' '.join([
+            f"github:{plugin.get('name')}" for plugin in plugins
+            if plugin.get('type') == 'github'])
 
     def set_base(self):
         print('Set vim profile to base level ...')
@@ -43,6 +55,11 @@ class ProfileSetter:
 
     def set_text(self):
         print('Set vim profile to text level ...')
+        text_prof = self.load_config(TEXT_CONFIG)
+        self.applyProfile(
+            f"{self.load_config(BASE_CONFIG).get('conf')}\n"
+            f"{text_prof.get('conf')}\n"
+            f"{self.format_vam_plugins(text_prof.get('plugins'))}")
         
     def set_lang(self, langs):
         lang_names = langs.split('-')
@@ -59,7 +76,7 @@ class App:
     E.g.: vem --prof-base=".vim" ...
     """
     def __init__(self, prof_base='Documents/sources/vem/profiles',
-                 prof_target='Documents/sources/.config/nvim'):
+                 prof_target='.config/nvim'):
         self._prof_base = Path.home() / Path(prof_base)
         self._prof_target = Path.home() / Path(prof_target)
         self._profileSetter = ProfileSetter(self._prof_base,
@@ -75,11 +92,11 @@ class App:
         langs: language list, seperated with hyphen
           E.g.: vem set langs python-nim-haskell
         """
-        if level is 'base':
+        if level == 'base':
             self._profileSetter.set_base()
-        elif level is 'text':
+        elif level == 'text':
             self._profileSetter.set_text()
-        elif level is 'langs':
+        elif level == 'langs':
             if langs is None:
                 print('Languages not set!')
                 print('Run `vem set -h` for details.')

@@ -1,16 +1,44 @@
 # vem
 
-vem: neovim environment manager
+vem: vim environment manager
+
+Generate vim configuration files in the following environments:
+
+. Basic text editing profile *base*: only some vim built-in
+  configurations and keyboard mappings, no plugins.
+
+. Advanced text editing profile *text*: 
+  based on *base* profile, adding more functions with plugins
+  such as auto-completion, toggle comments, maximize window, etc.
+
+. Developing profile *langs*: based on previous 2 profiles,
+  plus plugins for  for specific languages, such as Python,
+  Haskell, etc. Turn vim in IDE-like tools.
+
+Only for Linux and neovim by now, while easy to make it compatible
+with vim and Windows.
+
+## Installation
+
+Build from source:
+```
+git clone https://github.com/leetschau/vem.git
+cd vem
+. env/bin/activate
+pyinstaller -F vem.py
+```
+
+Or download binary `vem` and *profile* folder to local host.
+
+## Usage
+
+`./vem --prof-base=profiles st text`.
+
+Run `./vem` for help.
+
+# Develop
 
 使用编译型语言生成不依赖外部环境的二进制文件。
-
-vim 有3种工作环境：
-. 基本文本编辑 base: 只有一些配置和快捷键，不需要安装插件；
-. 高级文本编辑 text: 包含常用的编辑功能，如文本补全、注释、窗口最大化等；
-. 语言开发环境 lang: 对指定语言通过插件提供专门支持；
-
-根据不同环境要求生成包含 vam 插件定义的 vim 配置文件，
-运行时通过 vam 安装插件，生成一个完全可用的 vim。
 
 ## API
 
@@ -20,9 +48,9 @@ vim 有3种工作环境：
 * vem rb 回退到上次安装
 * vem up 使用上次设置的等级，用新的 vem 文件生成新配置并安装
 
-## 工作流程
+## Workflow
 
-### 参数设置
+### Parameter setup
 
 * profile 文件位置：prof_base, 默认值 ~/.local/vem
 
@@ -43,33 +71,33 @@ rollback 过程是将 set 第一步改为 `cp $prof_base/backup.vim /tmp/init.vi
 
 update 就是读当前配置的 level 然后用它作参数调用 set 过程。
 
-### 生成配置文件
+### How to build vim profile
 
 生成的配置文件第一行中包含此次生成配置所执行的命令，
 作为下次使用 `update` 命令更新时的参数。
 
-* base: base.vem
-* text: base.vim + text.vem
+* base: base.yml
+* text: base.yml + text.yml
 * langs: base.yml + text.yml + langs.yml,
   其中 langs.yml 由 langs 列表对应的 <lang>.yml 文件组合而成，
   例如当 langs = ['python', 'nim'] 时，langs.yml 由 python.yml
   和 nim.yml 组合而成。
 
-### 管理插件
+### Manage plugins
 
 所有更新均不直接编辑 vim 配置文件，而是修改所属范围的 vem 文件，
 然后用 `vem up` 更新到生产环境中。
 
-## 项目文件结构
+## Project structure
 
 * app/: 包含 vem 源码
 
 * profiles/: 包含 vim 配置组件，base.yml, text.yml 和不同语言的配置文件，
   例如 python.yml, nim.yml 等
 
-## vem 文件结构
+## File structure of a profile
 
-### 依赖插件版本（暂不实现）
+### vim-plug specific version (deprecated)
 
 vem 文件尽量使用 vim 语法和插件语法，
 vem 工具只做简单的文件拼接和插件管理工具的安装，
@@ -82,7 +110,7 @@ let g:clojure:something = 0
 Plug 'guns/vim-clojure-highlight', { 'for': 'clojure' }
 ```
 
-### 插件中立版本
+### Plugin manager agnostic style
 
 vem 文件只记录配置和插件信息，与使用何种插件无关，
 比如上面的例子使用了 vim-plug 语法，对等的 vam 语法为：
