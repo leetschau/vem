@@ -6,7 +6,9 @@ conf: |
   let g:pymode_breakpoint_bind = '<leader>b'
   let g:pymode_folding = 0
   let g:pymode_python = 'python3'
-  " let g:pymode_lint_ignore = ["E402", ]
+
+  " to use deoplete.nvim, install jedi, msgpack and pynvim with pip
+  let g:deoplete#enable_at_startup = 1
   autocmd FileType python cabbrev af PymodeLintAuto<CR>
 
   " nnoremap <buffer> <F7> :call flake8#Flake8()<CR>
@@ -17,3 +19,8 @@ plugins:
     type: github
   - name: python-mode/python-mode
     type: github
+  - name: davidhalter/jedi-vim
+    type: github
+  - name: Shougo/deoplete.nvim
+    type: github
+

@@ -1,0 +1,10 @@
+---
+conf: |
+  augroup ON_ASCIIDOCTOR_SAVE | au!
+    au BufWritePost *.adoc silent! :Asciidoctor2HTML
+  augroup end
+  nnoremap <leader>o :VoomToggle asciidoc<CR>
+
+plugins:
+  - name: vim-voom/VOom
+    type: github

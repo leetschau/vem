@@ -4,14 +4,14 @@ vem: vim environment manager
 
 Generate vim configuration files in the following environments:
 
-. Basic text editing profile *base*: only some vim built-in
+* Basic text editing profile *base*: only some vim built-in
   configurations and keyboard mappings, no plugins.
 
-. Advanced text editing profile *text*: 
+* Advanced text editing profile *text*:
   based on *base* profile, adding more functions with plugins
   such as auto-completion, toggle comments, maximize window, etc.
 
-. Developing profile *langs*: based on previous 2 profiles,
+* Developing profile *langs*: based on previous 2 profiles,
   plus plugins for  for specific languages, such as Python,
   Haskell, etc. Turn vim in IDE-like tools.
 
