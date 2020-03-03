@@ -35,8 +35,8 @@ class ProfileSetter:
             if plugin.get('type') == 'github']) + '\n\n'
 
     def apply_profile(self, profile:str):
-        if profile is None:
-            sys.stderr.write('Invalid level name.\nRun `vem st -h` for help\n')
+        if not profile.startswith('"#'):
+            sys.stderr.write(profile)
             sys.exit(2)
 
         with open(NEW_PROF, 'w') as f:
@@ -63,14 +63,40 @@ class ProfileSetter:
 
     def set_profile(self, level:str, langs:str):
         configs = {}
-        configs['base'] = self.load_config(BASE_CONFIG).get('conf', '')
+        header = f'"# Created by vem\n"# Level: {level}, Langs: {langs}\n'
+        configs['base'] = header + self.load_config(BASE_CONFIG).get('conf', '')
         text_prof = self.load_config(TEXT_CONFIG)
         configs['text'] = configs.get('base') + '\n\n\n--- text section ---\n\n' +\
             text_prof.get('conf', '') + '\n' +\
             self.format_vam_plugins(text_prof.get('plugins', ''))
         configs['langs'] = configs.get('text') +\
             reduce(self.lang_config, [] if langs is None else langs.split('-'), "")
-        self.apply_profile(configs.get(level, None))
+        self.apply_profile(configs.get(level, 'Invalid level name.\nRun `vem st -h` for help\n'))
+
+    def rollback_profile(self):
+        fullpath = self._prof_base / BACKUP
+        if fullpath.exists():
+            with open(fullpath, 'r') as f:
+                self.apply_profile(f.read())
+        else:
+            print("Backup file does not exist. Rollback cancelled.")
+
+    def update_profile(self):
+        fullpath = self._prof_target / TARGET_NAME
+        if not fullpath.exists():
+            stderr.write(f'File {TARGET_NAME} not exists in {self._prof_target}')
+            stderr.write('Use `st` command to generate one')
+            sys.exit(3)
+        with open(fullpath, 'r') as f:
+            secondLine = f.readlines()[1]
+        if not secondLine.startswith('"#'):
+            stderr.write('Bad format to fetch previous level and langs params')
+            sys.exit(4)
+        level = secondLine.split(', ')[0].split(': ')[1]
+        langs_str = secondLine.split(', ')[1].split(': ')[1]
+        langs = None if langs_str == 'None' else langs_str
+        print(f"Update profile with level: {level} and langs: {langs}")
+        self.set_profile(level, langs)
 
 
 class App:
@@ -105,7 +131,7 @@ class App:
 
         Rollback to last vim profile.
         """
-        print('Rollback to last profile ...')
+        self._profileSetter.rollback_profile()
 
     def up(self):
         """update profile
@@ -113,7 +139,7 @@ class App:
         Update vim profile with local configs.
         The level keep the same with the last settings.
         """
-        print('Updating vim profile ...')
+        self._profileSetter.update_profile()
 
 
 if __name__ == '__main__':
