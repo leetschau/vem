@@ -12,6 +12,7 @@ TARGET_NAME = Path('init.vim')
 BASE_CONFIG = Path('base.yml')
 TEXT_CONFIG = Path('text.yml')
 
+
 class ProfileSetter:
     def __init__(self, prof_base, prof_target):
         self._prof_base = prof_base
@@ -34,7 +35,7 @@ class ProfileSetter:
             f"github:{plugin.get('name')}" for plugin in plugins
             if plugin.get('type') == 'github']) + '\n\n'
 
-    def apply_profile(self, profile:str):
+    def apply_profile(self, profile: str):
         if not profile.startswith('"#'):
             sys.stderr.write(profile)
             sys.exit(2)
@@ -52,26 +53,32 @@ class ProfileSetter:
 
         self._prof_target.mkdir(parents=True, exist_ok=True)
         shutil.copy2(NEW_PROF, self._prof_target)
-        print('  Copy generated file from %s to %s' % (NEW_PROF, self._prof_target))
+        print(f'  Copy generated file from {NEW_PROF} to {self._prof_target}')
 
-    def lang_config(self, base:str, lang:str) -> str:
+    def lang_config(self, base: str, lang: str) -> str:
         if not (self._prof_base / Path(lang + '.yml')).exists():
             return base
         config = self.load_config(self._prof_base / Path(lang + '.yml'))
-        return base + f"\n--- {lang} section ---\n" + config.get('conf', '') +\
-                 '\n' + self.format_vam_plugins(config.get('plugins', ''))
+        return base + f'\n" --- {lang} section ---\n' +\
+            config.get('conf', '') +\
+            '\n' + self.format_vam_plugins(config.get('plugins', ''))
 
-    def set_profile(self, level:str, langs:str):
+    def set_profile(self, level: str, langs: str):
         configs = {}
         header = f'"# Created by vem\n"# Level: {level}, Langs: {langs}\n'
-        configs['base'] = header + self.load_config(BASE_CONFIG).get('conf', '')
+        configs['base'] = header +\
+            self.load_config(BASE_CONFIG).get('conf', '')
         text_prof = self.load_config(TEXT_CONFIG)
-        configs['text'] = configs.get('base') + '\n\n\n--- text section ---\n\n' +\
+        configs['text'] = configs.get('base') +\
+            '\n\n\n" --- text section ---\n\n' +\
             text_prof.get('conf', '') + '\n' +\
             self.format_vam_plugins(text_prof.get('plugins', ''))
         configs['langs'] = configs.get('text') +\
-            reduce(self.lang_config, [] if langs is None else langs.split('-'), "")
-        self.apply_profile(configs.get(level, 'Invalid level name.\nRun `vem st -h` for help\n'))
+            reduce(self.lang_config,
+                   [] if langs is None else langs.split('-'), "")
+        self.apply_profile(
+            configs.get(level,
+                        'Invalid level name.\nRun `vem st -h` for help\n'))
 
     def rollback_profile(self):
         fullpath = self._prof_base / BACKUP
@@ -84,14 +91,14 @@ class ProfileSetter:
     def update_profile(self):
         fullpath = self._prof_target / TARGET_NAME
         if not fullpath.exists():
-            stderr.write(f'File {TARGET_NAME} not exists in {self._prof_target}')
-            stderr.write('Use `st` command to generate one')
-            sys.exit(3)
+            errmsg = (f'File {TARGET_NAME} not exists in {self._prof_target}\n'
+                      'Use `st` command to generate one')
+            sys.exit(errmsg)
         with open(fullpath, 'r') as f:
             secondLine = f.readlines()[1]
         if not secondLine.startswith('"#'):
-            stderr.write('Bad format to fetch previous level and langs params')
-            sys.exit(4)
+            errmsg = 'Bad format to fetch previous level and langs params'
+            sys.exit(errmsg)
         level = secondLine.split(', ')[0].split(': ')[1]
         langs_str = secondLine.split(', ')[1].split(': ')[1]
         langs = None if langs_str == 'None' else langs_str
@@ -111,8 +118,7 @@ class App:
                  prof_target='.config/nvim'):
         self._prof_base = Path.home() / Path(prof_base)
         self._prof_target = Path.home() / Path(prof_target)
-        self._profileSetter = ProfileSetter(self._prof_base,
-                self._prof_target)
+        self._profileSetter = ProfileSetter(self._prof_base, self._prof_target)
         print('Profile base: %s' % self._prof_base)
         print('Profile target: %s' % self._prof_target)
 

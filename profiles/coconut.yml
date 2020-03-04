@@ -1,0 +1,3 @@
+plugins:
+  - name: manicmaniac/coconut.vim
+    type: github

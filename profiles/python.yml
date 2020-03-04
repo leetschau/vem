@@ -8,19 +8,19 @@ conf: |
   let g:pymode_python = 'python3'
 
   " to use deoplete.nvim, install jedi, msgpack and pynvim with pip
-  let g:deoplete#enable_at_startup = 1
-  autocmd FileType python cabbrev af PymodeLintAuto<CR>
+  " let g:deoplete#enable_at_startup = 1
+  " autocmd FileType python cabbrev af PymodeLintAuto<CR>
 
   " nnoremap <buffer> <F7> :call flake8#Flake8()<CR>
-  autocmd FileType python nnoremap <buffer> <F7> :call flake8#Flake8()<CR>
+  " autocmd FileType python nnoremap <buffer> <F7> :call flake8#Flake8()<CR>
 
 plugins:
-  - name: nvie/vim-flake8
-    type: github
   - name: python-mode/python-mode
     type: github
-  - name: davidhalter/jedi-vim
-    type: github
-  - name: Shougo/deoplete.nvim
-    type: github
+  #- name: nvie/vim-flake8
+    #type: github
+  #- name: davidhalter/jedi-vim
+    #type: github
+  #- name: Shougo/deoplete.nvim
+    #type: github
 

@@ -30,22 +30,46 @@ conf: |
   let g:ctrlp_custom_ignore = { 'dir': 'node_modules\|.git' }
   nnoremap <C-n> :CtrlPBuffer<CR>
 
-  " undo & undotree configs    
+  " undo & undotree configs
   set undodir=$HOME/.local/undo/ "make sure this folder exists
   set undofile
   set undolevels=1000
   set undoreload=2000
   nnoremap <leader>u :UndotreeToggle<CR>
 
-  " vim-maximizer         
+  " vim-maximizer
   nnoremap <silent><F3> :MaximizerToggle<CR>
-  vnoremap <silent><F3> :MaximizerToggle<CR>gv          
+  vnoremap <silent><F3> :MaximizerToggle<CR>gv
   inoremap <silent><F3> <C-o>:MaximizerToggle<CR>
 
   " ack
   if executable('ag')
     let g:ackprg = 'ag --vimgrep'
   endif
+
+  " disable ALE by default
+  let g:ale_enabled = 0
+
+  " Rainbow Parenthesis
+  let g:rainbow_active = 1
+  let g:rainbow_conf = {
+  \ 'ctermfgs': ['yellow', 'red', 'white', 'green', 'lightblue', 'lightred', 'lightgreen'],
+  \ 'operators': '_,_',
+  \ 'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+  \ 'separately': {
+  \   '*': {},
+  \   'tex': {
+  \     'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
+  \   },
+  \   'vim': {
+  \     'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
+  \   },
+  \   'html': {
+  \     'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
+  \   },
+  \   'css': 0,
+  \ }
+  \}
 
 plugins:
   - name: ervandew/supertab
@@ -71,5 +95,7 @@ plugins:
   - name: plasticboy/vim-markdown
     type: github
   - name: geoffharcourt/vim-matchit
+    type: github
+  - name: w0rp/ale
     type: github
 
