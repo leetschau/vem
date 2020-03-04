@@ -1,0 +1,1 @@
+autocmd BufRead,BufNewFile *.hy set filetype=clojure

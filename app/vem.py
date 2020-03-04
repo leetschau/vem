@@ -8,9 +8,10 @@ from functools import reduce
 
 NEW_PROF = Path('/tmp/init.vim')
 BACKUP = Path('backup.vim')
-TARGET_NAME = Path('init.vim')
 BASE_CONFIG = Path('base.yml')
 TEXT_CONFIG = Path('text.yml')
+TARGET_FILE = {'neovim': Path.home() / Path('.config/nvim/init.vim'),
+               'vim': Path.home() / Path('.vimrc')}
 
 
 class ProfileSetter:
@@ -44,14 +45,13 @@ class ProfileSetter:
             f.write(profile)
         print('  New profile generated at %s' % NEW_PROF)
 
-        target_file = self._prof_target / TARGET_NAME
-        if target_file.exists():
-            shutil.copy2(target_file, self._prof_base / BACKUP)
+        if self._prof_target.exists():
+            shutil.copy2(self._prof_target, self._prof_base / BACKUP)
             print('  Backup original profile to %s' % self._prof_base / BACKUP)
         else:
             print('  Origin profile not exists, skip backup')
 
-        self._prof_target.mkdir(parents=True, exist_ok=True)
+        self._prof_target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(NEW_PROF, self._prof_target)
         print(f'  Copy generated file from {NEW_PROF} to {self._prof_target}')
 
@@ -89,12 +89,12 @@ class ProfileSetter:
             print("Backup file does not exist. Rollback cancelled.")
 
     def update_profile(self):
-        fullpath = self._prof_target / TARGET_NAME
-        if not fullpath.exists():
-            errmsg = (f'File {TARGET_NAME} not exists in {self._prof_target}\n'
-                      'Use `st` command to generate one')
+        if not self._prof_target.exists():
+            errmsg = (f'File {self._prof_target} not exists in'
+                      f'{self._prof_target}\n'
+                      f'Use `st` command to generate one')
             sys.exit(errmsg)
-        with open(fullpath, 'r') as f:
+        with open(self._prof_target, 'r') as f:
             secondLine = f.readlines()[1]
         if not secondLine.startswith('"#'):
             errmsg = 'Bad format to fetch previous level and langs params'
@@ -110,14 +110,24 @@ class App:
     """vim environment manager
 
     Setup vim configuration files as you wish.
-    Override default settings with --prof-base or/and --prof-target
-    Paths are all relative to $HOME folder.
-    E.g.: vem --prof-base=".vim" ...
+
+    Override default settings with --prof-base or/and --mode
+
+      --mode: create vim / neovim configuration file. Default: neovim
+
+      --prof-base: the folder saving vem profiles, relative to $HOME folder.
+        Default: .local/vem/profiles
+
+    E.g.: vem st text
+          vem st langs python
+          vem st base --mode=vim
+          vem st langs python-nim --prof-base=Documents/vem/profiles
     """
-    def __init__(self, prof_base='Documents/sources/vem/profiles',
-                 prof_target='.config/nvim'):
+    def __init__(self, mode='neovim',
+                 prof_base='.local/vem/profiles'):
         self._prof_base = Path.home() / Path(prof_base)
-        self._prof_target = Path.home() / Path(prof_target)
+        self._prof_target = TARGET_FILE.get(mode if mode in TARGET_FILE
+                                            else 'neovim')
         self._profileSetter = ProfileSetter(self._prof_base, self._prof_target)
         print('Profile base: %s' % self._prof_base)
         print('Profile target: %s' % self._prof_target)
@@ -128,7 +138,7 @@ class App:
         Set vim profile with specific level.
         level: base | text | langs
         langs: language list, seperated with hyphen
-          E.g.: vem set langs python-nim-haskell
+          E.g.: vem st langs python-nim-haskell
         """
         self._profileSetter.set_profile(level, langs)
 

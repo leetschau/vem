@@ -50,6 +50,11 @@ conf: |
   " disable ALE by default
   let g:ale_enabled = 0
 
+  " markdown
+  let g:vim_markdown_folding_level = 3
+  let g:vim_markdown_toc_autofit = 1
+  nnoremap <leader>t :Toc<CR>
+
   " Rainbow Parenthesis
   let g:rainbow_active = 1
   let g:rainbow_conf = {

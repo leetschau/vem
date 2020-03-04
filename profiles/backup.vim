@@ -1,5 +1,5 @@
 "# Created by vem
-"# Level: langs, Langs: python
+"# Level: text, Langs: None
 filetype indent plugin on
 syntax on
 colo ron
@@ -90,6 +90,11 @@ endif
 " disable ALE by default
 let g:ale_enabled = 0
 
+" markdown
+let g:vim_markdown_folding_level = 3
+let g:vim_markdown_toc_autofit = 1
+nnoremap <leader>t :Toc<CR>
+
 " Rainbow Parenthesis
 let g:rainbow_active = 1
 let g:rainbow_conf = {
@@ -112,22 +117,4 @@ let g:rainbow_conf = {
 \}
 
 VAMActivate github:ervandew/supertab github:scrooloose/nerdtree github:kien/ctrlp.vim github:mbbill/undotree github:fholgado/minibufexpl.vim github:szw/vim-maximizer github:scrooloose/nerdcommenter github:rlue/vim-barbaric github:kien/rainbow_parentheses.vim github:vim-airline/vim-airline github:plasticboy/vim-markdown github:geoffharcourt/vim-matchit github:w0rp/ale
-
-
-" --- python section ---
-
-let g:pymode_lint_on_fly = 0
-let g:pymode_breakpoint = 1
-let g:pymode_breakpoint_bind = '<leader>b'
-let g:pymode_folding = 0
-let g:pymode_python = 'python3'
-
-" to use deoplete.nvim, install jedi, msgpack and pynvim with pip
-" let g:deoplete#enable_at_startup = 1
-" autocmd FileType python cabbrev af PymodeLintAuto<CR>
-
-" nnoremap <buffer> <F7> :call flake8#Flake8()<CR>
-" autocmd FileType python nnoremap <buffer> <F7> :call flake8#Flake8()<CR>
-
-VAMActivate github:python-mode/python-mode
 

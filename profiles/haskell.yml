@@ -1,4 +1,7 @@
 ---
+conf: |
+  autocmd FileType haskell nnoremap <C-q> :execute ':!stack hoogle -- -i <cword>'<cr>
+
 plugins:
   - name: neovimhaskell/haskell-vim
     type: github
