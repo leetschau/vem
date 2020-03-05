@@ -53,7 +53,11 @@ conf: |
   " markdown
   let g:vim_markdown_folding_level = 3
   let g:vim_markdown_toc_autofit = 1
-  nnoremap <leader>t :Toc<CR>
+  autocmd FileType markdown nnoremap <leader>t :Toc<CR>
+
+  " Voom outline
+  autocmd FileType asciidoc nnoremap <leader>o :VoomToggle asciidoc<CR>
+  autocmd FileType markdown nnoremap <leader>o :VoomToggle markdown<CR>
 
   " Rainbow Parenthesis
   let g:rainbow_active = 1
@@ -99,8 +103,9 @@ plugins:
     type: github
   - name: plasticboy/vim-markdown
     type: github
+  - name: vim-voom/VOom
+    type: github
   - name: geoffharcourt/vim-matchit
     type: github
   - name: w0rp/ale
     type: github
-
