@@ -12,6 +12,7 @@ BASE_CONFIG = Path('base.yml')
 TEXT_CONFIG = Path('text.yml')
 TARGET_FILE = {'neovim': Path.home() / Path('.config/nvim/init.vim'),
                'vim': Path.home() / Path('.vimrc')}
+LANG_SEP = '+'
 
 
 class ProfileSetter:
@@ -75,7 +76,7 @@ class ProfileSetter:
             self.format_vam_plugins(text_prof.get('plugins', ''))
         configs['langs'] = configs.get('text') +\
             reduce(self.lang_config,
-                   [] if langs is None else langs.split('-'), "")
+                   [] if langs is None else langs.split(LANG_SEP), "")
         self.apply_profile(
             configs.get(level,
                         'Invalid level name.\nRun `vem st -h` for help\n'))
@@ -121,7 +122,7 @@ class App:
     E.g.: vem st text
           vem st langs python
           vem st base --mode=vim
-          vem st langs python-nim --prof-base=Documents/vem/profiles
+          vem st langs python+nim --prof-base=Documents/vem/profiles
     """
     def __init__(self, mode='neovim',
                  prof_base='.local/vem/profiles'):

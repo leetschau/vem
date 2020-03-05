@@ -15,8 +15,13 @@ Generate vim configuration files in the following environments:
   plus plugins for  for specific languages, such as Python,
   Haskell, etc. Turn vim in IDE-like tools.
 
-Only for Linux and neovim by now, while easy to make it compatible
-with vim and Windows.
+Only for Linux by now, while easy to make it compatible with Windows.
+
+## Features
+
+* Zero dependencies: copy a stand-alone binary and some profiles,
+  then change vim into any style you like.
+
 
 ## Installation
 
