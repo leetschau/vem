@@ -1,5 +1,5 @@
 "# Created by vem
-"# Level: langs, Langs: python+asciidoc
+"# Level: langs, Langs: python+csv
 filetype indent plugin on
 syntax on
 colo ron
@@ -15,7 +15,6 @@ set incsearch
 set et
 set sw=2
 set ts=2
-set nu
 set nowrap
 
 nnoremap ; :
@@ -95,6 +94,13 @@ let g:vim_markdown_folding_level = 3
 let g:vim_markdown_toc_autofit = 1
 autocmd FileType markdown nnoremap <leader>t :Toc<CR>
 
+" Voom outline
+let g:voom_tree_placement = "right"
+let g:voom_python_versions = [3]
+let g:voom_tree_width = 40
+autocmd FileType asciidoc nnoremap <leader>o :VoomToggle asciidoc<CR>
+autocmd FileType markdown nnoremap <leader>o :VoomToggle markdown<CR>
+
 " Rainbow Parenthesis
 let g:rainbow_active = 1
 let g:rainbow_conf = {
@@ -116,7 +122,7 @@ let g:rainbow_conf = {
 \ }
 \}
 
-VAMActivate github:ervandew/supertab github:scrooloose/nerdtree github:kien/ctrlp.vim github:mbbill/undotree github:fholgado/minibufexpl.vim github:szw/vim-maximizer github:scrooloose/nerdcommenter github:rlue/vim-barbaric github:kien/rainbow_parentheses.vim github:vim-airline/vim-airline github:plasticboy/vim-markdown github:geoffharcourt/vim-matchit github:w0rp/ale
+VAMActivate github:ervandew/supertab github:scrooloose/nerdtree github:kien/ctrlp.vim github:mbbill/undotree github:fholgado/minibufexpl.vim github:szw/vim-maximizer github:scrooloose/nerdcommenter github:rlue/vim-barbaric github:kien/rainbow_parentheses.vim github:vim-airline/vim-airline github:plasticboy/vim-markdown github:vim-voom/VOom github:geoffharcourt/vim-matchit github:w0rp/ale
 
 
 " --- python section ---
@@ -137,11 +143,7 @@ let g:pymode_python = 'python3'
 VAMActivate github:python-mode/python-mode
 
 
-" --- asciidoc section ---
-augroup ON_ASCIIDOCTOR_SAVE | au!
-  au BufWritePost *.adoc silent! :Asciidoctor2HTML
-augroup end
-nnoremap <leader>o :VoomToggle asciidoc<CR>
+" --- csv section ---
 
-VAMActivate github:vim-voom/VOom
+VAMActivate github:chrisbra/csv.vim
 

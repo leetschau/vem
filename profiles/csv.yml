@@ -1,0 +1,6 @@
+---
+conf: |
+
+plugins:
+  - name: chrisbra/csv.vim
+    type: github

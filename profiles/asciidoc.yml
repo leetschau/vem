@@ -1,6 +1,6 @@
 ---
 conf: |
-  augroup ON_ASCIIDOCTOR_SAVE | au!
-    au BufWritePost *.adoc silent! :Asciidoctor2HTML
-  augroup end
+  imap &c [source,shell,title='',caption="代码清单{chNo}-{counter:console_enhance_src_no} "]<CR>----<CR>----<ESC>2k020la
+
+  imap &n [NOTE]<CR>====<CR>====<ESC>O
 
