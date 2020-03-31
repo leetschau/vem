@@ -138,8 +138,8 @@ class App:
 
         Set vim profile with specific level.
         level: base | text | langs
-        langs: language list, seperated with hyphen
-          E.g.: vem st langs python-nim-haskell
+        langs: language list, seperated with '+'
+          E.g.: vem st langs python+nim+haskell
         """
         self._profileSetter.set_profile(level, langs)
 

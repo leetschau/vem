@@ -1,5 +1,5 @@
 "# Created by vem
-"# Level: langs, Langs: python+csv
+"# Level: langs, Langs: python+asciidoc
 filetype indent plugin on
 syntax on
 colo ron
@@ -143,7 +143,10 @@ let g:pymode_python = 'python3'
 VAMActivate github:python-mode/python-mode
 
 
-" --- csv section ---
+" --- asciidoc section ---
+imap &c [source,shell,title='',caption="代码清单{chNo}-{counter:console_enhance_src_no} "]<CR>----<CR>----<ESC>2k020la
 
-VAMActivate github:chrisbra/csv.vim
+imap &n [NOTE]<CR>====<CR>====<ESC>O
+
+VAMActivate 
 

@@ -1,0 +1,6 @@
+---
+conf: |
+
+plugins:
+  - name: let-def/ocp-indent-vim
+    type: github
