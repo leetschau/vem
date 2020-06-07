@@ -1,5 +1,5 @@
 "# Created by vem
-"# Level: langs, Langs: python+asciidoc
+"# Level: langs, Langs: langbase+python+asciidoc+ocaml
 filetype indent plugin on
 syntax on
 colo ron
@@ -125,6 +125,20 @@ let g:rainbow_conf = {
 VAMActivate github:ervandew/supertab github:scrooloose/nerdtree github:kien/ctrlp.vim github:mbbill/undotree github:fholgado/minibufexpl.vim github:szw/vim-maximizer github:scrooloose/nerdcommenter github:rlue/vim-barbaric github:kien/rainbow_parentheses.vim github:vim-airline/vim-airline github:plasticboy/vim-markdown github:vim-voom/VOom github:geoffharcourt/vim-matchit github:w0rp/ale
 
 
+" --- langbase section ---
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+VAMActivate github:vim-syntastic/syntastic
+
+
 " --- python section ---
 
 let g:pymode_lint_on_fly = 0
@@ -144,9 +158,14 @@ VAMActivate github:python-mode/python-mode
 
 
 " --- asciidoc section ---
-imap &c [source,shell,title='',caption="代码清单{chNo}-{counter:console_enhance_src_no} "]<CR>----<CR>----<ESC>2k020la
-
+imap &c [source,shell,title='',caption="代码清单{chNo}-{counter:data_analysis} "]<CR>----<CR>----<ESC>2k020la
+imap &q {ldquo}{rdquo}<ESC>06la
 imap &n [NOTE]<CR>====<CR>====<ESC>O
 
 VAMActivate 
+
+
+" --- ocaml section ---
+
+VAMActivate github:let-def/ocp-indent-vim
 

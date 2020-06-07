@@ -112,3 +112,5 @@ plugins:
     type: github
   - name: w0rp/ale
     type: github
+  - name: tpope/vim-fugitive
+    type: github
