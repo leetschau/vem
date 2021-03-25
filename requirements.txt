@@ -15,7 +15,7 @@ ptyprocess==0.6.0
 Pygments==2.5.2
 PyInstaller==3.6
 pynvim==0.4.1
-PyYAML==5.3
+PyYAML==5.4
 six==1.14.0
 termcolor==1.1.0
 traitlets==4.3.3
